@@ -5,13 +5,14 @@ from models.tiny_yolo import TinyYoloNet
 from utils import *
 from darknet import Darknet
 
-def detect(cfgfile, weightfile, imgfile):
+def detect(cfgfile, weightfile, imgfile, namesfile):
     m = Darknet(cfgfile)
 
     m.print_network()
     m.load_weights(weightfile)
     print('Loading weights from %s... Done!' % (weightfile))
 
+    """
     num_classes = 80
     if num_classes == 20:
         namesfile = 'data/voc.names'
@@ -19,7 +20,7 @@ def detect(cfgfile, weightfile, imgfile):
         namesfile = 'data/coco.names'
     else:
         namesfile = 'data/names'
-    
+    """
     use_cuda = 1
     if use_cuda:
         m.cuda()
@@ -107,14 +108,15 @@ def detect_skimage(cfgfile, weightfile, imgfile):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 4:
+    if len(sys.argv) == 5:
         cfgfile = sys.argv[1]
         weightfile = sys.argv[2]
-        imgfile = sys.argv[3]
-        detect(cfgfile, weightfile, imgfile)
+        namesfile = sys.argv[3]
+        imgfile = sys.argv[4]
+        detect(cfgfile, weightfile, imgfile, namesfile)
         #detect_cv2(cfgfile, weightfile, imgfile)
         #detect_skimage(cfgfile, weightfile, imgfile)
     else:
         print('Usage: ')
-        print('  python detect.py cfgfile weightfile imgfile')
+        print('  python detect.py cfgfile weightfile namesfile imgfile')
         #detect('cfg/tiny-yolo-voc.cfg', 'tiny-yolo-voc.weights', 'data/person.jpg', version=1)
