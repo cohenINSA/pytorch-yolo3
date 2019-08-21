@@ -130,3 +130,5 @@ save plot results to predictions.jpg
 ```
 ![predictions](data/predictions.jpg)
 
+### Changes from original repo
+- [x] allow to detect custom classes (detect.py)
