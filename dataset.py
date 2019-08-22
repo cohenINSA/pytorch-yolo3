@@ -12,21 +12,23 @@ from image import *
 
 class listDataset(Dataset):
 
-    def __init__(self, root, shape=None, shuffle=True, transform=None, target_transform=None, train=False, seen=0, batch_size=64, num_workers=4):
-       with open(root, 'r') as file:
-           self.lines = file.readlines()
+    def __init__(self, root, shape=None, shuffle=True, transform=None, target_transform=None, train=False, seen=0,
+                 batch_size=64, num_workers=4, data_augmentation=None):
+        with open(root, 'r') as file:
+            self.lines = file.readlines()
 
-       if shuffle:
-           random.shuffle(self.lines)
+        if shuffle:
+            random.shuffle(self.lines)
 
-       self.nSamples  = len(self.lines)
-       self.transform = transform
-       self.target_transform = target_transform
-       self.train = train
-       self.shape = shape
-       self.seen = seen
-       self.batch_size = batch_size
-       self.num_workers = num_workers
+        self.nSamples  = len(self.lines)
+        self.transform = transform
+        self.target_transform = target_transform
+        self.train = train
+        self.shape = shape
+        self.seen = seen
+        self.batch_size = batch_size
+        self.num_workers = num_workers
+        self.data_augmentation = data_augmentation
 
     def __len__(self):
         return self.nSamples
@@ -53,10 +55,10 @@ class listDataset(Dataset):
                self.shape = (width, width)
 
         if self.train:
-            jitter = 0.2
-            hue = 0.1
-            saturation = 1.5 
-            exposure = 1.5
+            jitter = self.data_augmentation['jitter']
+            hue = self.data_augmentation['hue']
+            saturation = self.data_augmentation['saturation']
+            exposure = self.data_augmentation['exposure']
 
             img, label = load_data_detection(imgpath, self.shape, jitter, hue, saturation, exposure)
             label = torch.from_numpy(label)

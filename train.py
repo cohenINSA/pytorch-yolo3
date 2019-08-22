@@ -65,6 +65,15 @@ if __name__ == "__main__":
     save_interval = 10  # epoches
     dot_interval  = 70  # batches
 
+    #Train augmentation
+    data_augmentation = dict()
+    data_augmentation['jitter'] = float(net_options['jitter']) if 'jitter' in net_options.keys() else 0
+    data_augmentation['hue'] = float(net_options['hue']) if 'hue' in net_options.keys() else 0
+    data_augmentation['saturation'] = float(net_options['saturation']) if 'saturation' in net_options.keys() else 0
+    data_augmentation['exposure'] = float(net_options['exposure']) if 'exposure' in net_options.keys() else 0
+    data_augmentation['angle'] = float(net_options['angle']) if 'angle' in net_options.keys() else 0
+    data_augmentation['flip'] = True if int(net_options['flip'])== 1 else False
+
     # Test parameters
     conf_thresh   = opt.conf_thresh
     nms_thresh    = opt.nms_thresh
@@ -148,7 +157,8 @@ if __name__ == "__main__":
                            train=True,
                            seen=cur_model.seen,
                            batch_size=batch_size,
-                           num_workers=num_workers),
+                           num_workers=num_workers,
+                           data_augmentation=data_augmentation),
             batch_size=batch_size, shuffle=False, **kwargs)
 
         lr = adjust_learning_rate(optimizer, processed_batches)
