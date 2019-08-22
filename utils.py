@@ -112,7 +112,7 @@ def convert2cpu_long(gpu_matrix):
     return torch.LongTensor(gpu_matrix.size()).copy_(gpu_matrix)
 
 def get_region_boxes(output, conf_thresh, num_classes, anchors, num_anchors, only_objectness=1, validation=False):
-    anchor_step = len(anchors)/num_anchors
+    anchor_step = len(anchors)//num_anchors
     if output.dim() == 3:
         output = output.unsqueeze(0)
     batch = output.size(0)
@@ -379,15 +379,18 @@ def scale_bboxes(bboxes, width, height):
     return dets
       
 def file_lines(thefilepath):
-    count = 0
-    thefile = open(thefilepath, 'rb')
-    while True:
-        buffer = thefile.read(8192*1024)
-        if not buffer:
-            break
-        count += buffer.count('\n')
-    thefile.close( )
-    return count
+    with open(thefilepath) as thefile:
+        lines = thefile.readlines()
+    return len(lines)
+    # count = 0
+    # thefile = open(thefilepath, 'rb')
+    # while True:
+    #     buffer = thefile.read(8192*1024)
+    #     if not buffer:
+    #         break
+    #     count += buffer.count('\n')
+    # thefile.close( )
+    # return count
 
 def get_image_size(fname):
     '''Determine the image type of fhandle and return its size.

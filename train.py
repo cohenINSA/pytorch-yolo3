@@ -50,7 +50,7 @@ steps         = [float(step) for step in net_options['steps'].split(',')]
 scales        = [float(scale) for scale in net_options['scales'].split(',')]
 
 #Train parameters
-max_epochs    = max_batches*batch_size/nsamples+1
+max_epochs    = int(max_batches*batch_size/nsamples+1)
 use_cuda      = True
 seed          = int(time.time())
 eps           = 1e-5
@@ -171,7 +171,7 @@ def train(epoch):
         t8 = time.time()
         optimizer.step()
         t9 = time.time()
-        if False and batch_idx > 1:
+        if batch_idx > 1:
             avg_time[0] = avg_time[0] + (t2-t1)
             avg_time[1] = avg_time[1] + (t3-t2)
             avg_time[2] = avg_time[2] + (t4-t3)
